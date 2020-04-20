@@ -8,6 +8,7 @@ import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
 import 'package:flutterapptest/widgets/LoginButton.dart';
 import 'package:flutterapptest/widgets/NavBar.dart';
+import 'package:flutterapptest/widgets/VerticalBookItemWidget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -80,11 +81,14 @@ class _PageState extends State<HomePage> {
   }
 
   Widget getMainView() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        getHorizontalBookList()
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          getHorizontalBookList(),
+          getVerticalBookList()
+        ],
+      ),
     );
   }
 
@@ -101,6 +105,25 @@ class _PageState extends State<HomePage> {
           itemCount:allBooks.length,
           itemBuilder: (BuildContext context, int index) {
             return HorizontalBookItemWidget(allBooks[index]);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget getVerticalBookList() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: SizeConfig.blockSizeVertical * 10, left: 20),
+      child: Container(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          reverse: false,
+          padding: EdgeInsets.only(top: 5.0),
+          scrollDirection: Axis.vertical,
+          itemCount:allBooks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return VerticalBookItemWidget(allBooks[index]);
           },
         ),
       ),
