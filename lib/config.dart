@@ -1,5 +1,3 @@
-//https://stackoverflow.com/questions/59433287/unsuported-android-plugin-version-3-5-3-after-upgrading-flutter-1-12-13hotfix
-
 enum Flavor {
   DEVELOPMENT,
   RELEASE,
