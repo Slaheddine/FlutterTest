@@ -21,7 +21,7 @@ class BookServices extends HttpManager{
   static BookServices getInstance() {
     return _singleton;
   }
-  
+
   @override
   List castDynamicToList(listResponse) {
     List<Book> list = List<Book>.from(listResponse.map((i) => Book.fromJson(i)));
@@ -38,7 +38,11 @@ class BookServices extends HttpManager{
     Book b = Book(id: "5e8b51c22452b455e54ffc1822", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
     Book b1 = Book(id: "5e8b51c22452b455e54ffc1811", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
     Book b2 = Book(id: "5e8b51c22452b455e54ffc1844", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
-    List<Book> list = [b, b1, b2];
+    Book b3 = Book(id: "5e8b51c22452b455e54ffc182212", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
+    Book b4 = Book(id: "5e8b51c22452b455e54ffc181144", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
+    Book b5 = Book(id: "5e8b51c22452b455e54ffc184411", volume: 1, title: "Le guide du voyageur galactique", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
+
+    List<Book> list = [b, b1, b2, b3, b4, b5];
     return list;
   }
 }

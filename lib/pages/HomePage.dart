@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutterapptest/localizations/AppLocalizations.dart';
-import 'package:flutterapptest/services/ProfileServices.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
+import 'package:flutterapptest/models/Book.dart';
+import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
+import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
 import 'package:flutterapptest/widgets/LoginButton.dart';
+import 'package:flutterapptest/widgets/NavBar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,25 +16,12 @@ class HomePage extends StatefulWidget {
 
 class _PageState extends State<HomePage> {
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  GlobalKey<LoginButtonState> loginButtonKey = GlobalKey();
-  bool loginError = false;
+  List<Book> allBooks = List();
 
   @override
   void initState() {
     super.initState();
-
-    Timer(Duration(seconds: 3), () => {
-
-      ProfileServices.getInstance().userIsLogged().then((logged) {
-        if(logged) {
-
-        } else {
-
-        }
-      })
-    });
+    loadAllBook();
   }
 
   @override
@@ -46,11 +35,77 @@ class _PageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Constants.backgroundColors,
         elevation: 0.0,
-        title: Text("az"),
+        centerTitle: true,
+        title: RichText(
+          text: new TextSpan(
+            // Note: Styles for TextSpans must be explicitly defined.
+            // Child text spans will inherit styles from parent
+            style: new TextStyle(
+              fontSize: 14.0,
+              color: Colors.black,
+            ),
+            children: <TextSpan>[
+              new TextSpan(text: "Mavrin", style: new TextStyle(fontSize :SizeConfig.blockSizeVertical * 3, fontWeight: FontWeight.w300, color: Constants.secondColor)),
+              new TextSpan(text: "Book", style: new TextStyle(fontSize :SizeConfig.blockSizeVertical * 3, fontWeight: FontWeight.bold, color: Constants.secondColor)),
+            ],
+          ),
+        ),
       ),
       body: Container(
         color:  Constants.backgroundColors,
+        child: Stack(
+          children: <Widget>[
+            getMainView(),
+            Padding(
+              padding: EdgeInsets.only(bottom : SizeConfig.blockSizeVertical * 2),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: NavBar(
+                  onAllBooksClicked: () {},
+                  onSavedBooksClicked: () {},
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
+
+  Future loadAllBook() async {
+    List books = await BookServices.getInstance().mockBookList();
+    setState(() {
+      allBooks = books;
+    });
+  }
+
+  Widget getMainView() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        getHorizontalBookList()
+      ],
+    );
+  }
+
+  Widget getHorizontalBookList() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
+      child: Container(
+        height: SizeConfig.blockSizeVertical * 28,
+        child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+          reverse: false,
+          padding: EdgeInsets.only(top: 5.0),
+          scrollDirection: Axis.horizontal,
+          itemCount:allBooks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return HorizontalBookItemWidget(allBooks[index]);
+          },
+        ),
+      ),
+    );
+  }
+
+  //HorizontalBookItemWidget(allBooks[index])
 }

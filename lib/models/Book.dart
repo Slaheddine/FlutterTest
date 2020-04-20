@@ -24,4 +24,12 @@ class Book {
     data['imageUrl'] = this.imageUrl;
     return data;
   }
+
+  @override
+  bool operator == (other) {
+    return id==(other.id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
