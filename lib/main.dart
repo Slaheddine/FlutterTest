@@ -4,11 +4,12 @@ import 'package:flutterapptest/pages/LoginPage.dart';
 import 'package:flutterapptest/pages/SplashScreen.dart';
 
 import 'localizations/AppLocalizations.dart';
+import 'utils/SizeConfig.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

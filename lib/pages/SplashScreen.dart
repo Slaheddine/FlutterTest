@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutterapptest/MyNavigator.dart';
-import 'package:flutterapptest/services/ProfileServices.dart';
+import 'package:flutterapptest/utils/SizeConfig.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,18 +10,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  bool showImage = false;
-
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_){
-      setState(() {
-        showImage = true;
-      });
+      SizeConfig().init(context);
     });
 
+
+    /*
     Timer(Duration(seconds: 3), () => {
 
       ProfileServices.getInstance().userIsLogged().then((logged) {
@@ -33,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       })
     });
+    */
   }
 
   @override
@@ -47,13 +45,9 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         children: <Widget>[
           Container(
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 2000),
-              opacity: (showImage) ? 1.0 : 0.0,
-              child: Image.asset(
-                "assets/images/splash_back.jpeg",
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              "assets/images/splash_back.jpeg",
+              fit: BoxFit.cover,
             ),
           ),
           Padding(
