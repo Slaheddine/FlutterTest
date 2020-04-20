@@ -19,13 +19,12 @@ class NavBar extends StatefulWidget {
 }
 
 class NavBarState extends State<NavBar> {
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return  Container(
       decoration: BoxDecoration(
-        color: Constants.backgroundColorsBlur,
+        color: Constants.backgroundColorsBlur.withOpacity(0.9),
         borderRadius: BorderRadius.all(Radius.circular(40)),
       ),
       height: SizeConfig.blockSizeVertical * 6,
@@ -49,7 +48,9 @@ class NavBarState extends State<NavBar> {
         width: SizeConfig.blockSizeVertical * 8 * 0.5,
         child: InkWell(
           customBorder: new CircleBorder(),
-          onTap: () {},
+          onTap: () {
+            widget.onAllBooksClicked();
+          },
           child: new Icon(
             Icons.bookmark,
             color: Constants.secondColor,
@@ -64,7 +65,9 @@ class NavBarState extends State<NavBar> {
         width: SizeConfig.blockSizeVertical * 8 * 0.5,
         child: InkWell(
           customBorder: new CircleBorder(),
-          onTap: () {},
+          onTap: () {
+            widget.onSavedBooksClicked();
+          },
           child: new Icon(
             Icons.bookmark,
             color: Constants.secondColor,

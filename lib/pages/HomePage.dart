@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _PageState extends State<HomePage> {
 
   List<Book> allBooks = List();
+  PageController _pageController = PageController(viewportFraction : 1);
 
   @override
   void initState() {
@@ -62,8 +63,12 @@ class _PageState extends State<HomePage> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: NavBar(
-                  onAllBooksClicked: () {},
-                  onSavedBooksClicked: () {},
+                  onAllBooksClicked: () {
+                    _pageController.animateToPage(0, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                  },
+                  onSavedBooksClicked: () {
+                    _pageController.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                  },
                 ),
               ),
             )
@@ -81,6 +86,22 @@ class _PageState extends State<HomePage> {
   }
 
   Widget getMainView() {
+    return PageView.builder (
+      controller: _pageController,
+      physics:new NeverScrollableScrollPhysics(),
+      itemCount: 2,
+      itemBuilder : (BuildContext context, int index) {
+        if(index == 0) {
+            return allBookPage();
+        } else {
+            return savedBookPage();
+        }
+      },
+      scrollDirection: Axis.horizontal,
+    );
+  }
+
+  Widget allBookPage() {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -90,6 +111,10 @@ class _PageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Widget savedBookPage() {
+    return getVerticalBookList();
   }
 
   Widget getHorizontalBookList() {
