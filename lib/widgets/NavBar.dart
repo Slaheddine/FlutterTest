@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
 
+import 'MyIconButton.dart';
+
 class NavBar extends StatefulWidget {
 
   final onAllBooksClicked;
@@ -32,46 +34,42 @@ class NavBarState extends State<NavBar> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Spacer(),
-            getSavedBookIconButton(),
+            getAllIcon(),
             Spacer(),
-            getAllBookIconButton(),
+            getSavedIcon(),
             Spacer(),
           ],
         ),
       );
   }
 
-  Widget getSavedBookIconButton() {
+  Widget getAllIcon() {
     return Container(
-      height: SizeConfig.blockSizeVertical * 6 * 0.5,
-      width: SizeConfig.blockSizeVertical * 6 * 0.5,
-      child: InkWell(
-        customBorder: new CircleBorder(),
-        onTap: () {
-
-        },
-        child: new Icon(
-          Icons.bookmark,
-          color: Constants.secondColor,
-        ),
-      ),
+        height: SizeConfig.blockSizeVertical * 8 * 0.5,
+        width: SizeConfig.blockSizeVertical * 8 * 0.5,
+        child: InkWell(
+          customBorder: new CircleBorder(),
+          onTap: () {},
+          child: new Icon(
+            Icons.bookmark,
+            color: Constants.secondColor,
+          ),
+        )
     );
   }
 
-  Widget getAllBookIconButton() {
+  Widget getSavedIcon() {
     return Container(
-      height: SizeConfig.blockSizeVertical * 6 * 0.5,
-      width: SizeConfig.blockSizeVertical * 6 * 0.5,
-      child: InkWell(
-        customBorder: new CircleBorder(),
-        onTap: () {
-
-        },
-        child: new Icon(
-          Icons.bookmark,
-          color: Constants.secondColor,
-        ),
-      ),
+        height: SizeConfig.blockSizeVertical * 8 * 0.5,
+        width: SizeConfig.blockSizeVertical * 8 * 0.5,
+        child: InkWell(
+          customBorder: new CircleBorder(),
+          onTap: () {},
+          child: new Icon(
+            Icons.bookmark,
+            color: Constants.secondColor,
+          ),
+        )
     );
   }
 }
