@@ -28,9 +28,9 @@ class ItemState extends State<HorizontalBookItemWidget> {
         width: SizeConfig.blockSizeHorizontal * 35,
         child: Stack(
             children: <Widget>[
-              Image.network(
-                  widget.book.imageUrl,
-                  fit: BoxFit.cover
+              FadeInImage(
+                  image: NetworkImage(widget.book.imageUrl),
+                  placeholder: AssetImage("assets/images/placeholder.jpg")
               ),
               Align(
                 alignment: Alignment.bottomRight,

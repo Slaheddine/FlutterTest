@@ -31,9 +31,9 @@ class ItemState extends State<VerticalBookItemWidget> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: SizeConfig.blockSizeHorizontal*25,
-                child: Image.network(
-                    widget.book.imageUrl,
-                    fit: BoxFit.fill
+                child: FadeInImage(
+                    image: NetworkImage(widget.book.imageUrl),
+                    placeholder: AssetImage("assets/images/placeholder.jpg")
                 ),
               ),
             ),

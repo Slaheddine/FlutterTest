@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
+import 'package:flutterapptest/localizations/AppLocalizations.dart';
 import 'package:flutterapptest/models/Book.dart';
 import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _PageState extends State<HomePage> {
 
+  bool isLoading = true;
   List<Book> allBooks = List();
   PageController _pageController = PageController(viewportFraction : 1);
 
@@ -79,13 +81,33 @@ class _PageState extends State<HomePage> {
   }
 
   Future loadAllBook() async {
+    setState(() {
+      isLoading = true;
+    });
     List books = await BookServices.getInstance().mockBookList();
     setState(() {
       allBooks = books;
+      isLoading = false;
     });
   }
 
   Widget getMainView() {
+
+    if(isLoading) {
+      return Container(
+        child: Center(
+          child: SizedBox(
+            height: SizeConfig.blockSizeVertical * 5.5,
+            width: SizeConfig.blockSizeVertical * 5.5,
+            child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(Constants.secondColor),
+              strokeWidth: 3,
+            ),
+          ),
+        ),
+      );
+    }
+
     return PageView.builder (
       controller: _pageController,
       physics:new NeverScrollableScrollPhysics(),
@@ -104,9 +126,17 @@ class _PageState extends State<HomePage> {
   Widget allBookPage() {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           getHorizontalBookList(),
+          Padding(
+            padding: const EdgeInsets.only(left : 30.0),
+            child: Text(AppLocalizations.of(context).translate("best_seller"),
+                textAlign: TextAlign.left,
+                style: new TextStyle(fontSize :SizeConfig.blockSizeVertical * 2.7, fontWeight: FontWeight.w400, color: Constants.secondColor)
+            ),
+          ),
           getVerticalBookList()
         ],
       ),

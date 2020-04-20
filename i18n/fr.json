@@ -1,5 +1,6 @@
 {
   "email" : "email",
   "password" : "Mot de passe",
-  "login" : "Connexion"
+  "login" : "Connexion",
+  "best_seller" : "Meilleur vente"
 }
