@@ -1,3 +1,5 @@
 {
-  "app_name" : "MarvinBook"
+  "email" : "email",
+  "password" : "Mot de passe",
+  "login" : "Connexion"
 }
