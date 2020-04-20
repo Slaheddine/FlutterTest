@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/localizations/AppLocalizations.dart';
+import 'package:flutterapptest/myNavigator.dart';
 import 'package:flutterapptest/services/ProfileServices.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
 import 'package:flutterapptest/utils/SizeConfig.dart';
+import 'package:flutterapptest/widgets/EditTextWidget.dart';
+import 'package:flutterapptest/widgets/LoginButton.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,17 +16,14 @@ class LoginPage extends StatefulWidget {
 
 class _PageState extends State<LoginPage> {
 
-  bool showImage = false;
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  GlobalKey<LoginButtonState> loginButtonKey = GlobalKey();
+  bool loginError = false;
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      setState(() {
-        showImage = true;
-      });
-    });
 
     Timer(Duration(seconds: 3), () => {
 
@@ -58,61 +58,23 @@ class _PageState extends State<LoginPage> {
                 width: SizeConfig.blockSizeHorizontal * 56,
               ),
               SizedBox(height: 50,),
-              Container(
-                decoration: BoxDecoration(
-                  color: Constants.backgroundColorsBlur,
-                  borderRadius: BorderRadius.all(Radius.circular(40)),
-                ),
-                height: SizeConfig.blockSizeVertical * 6,
-                width: SizeConfig.blockSizeHorizontal * 80,
-                child: TextFormField(
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
-                        fontWeight: FontWeight.w300
-                    ),
-                    decoration: InputDecoration(
-                        hintStyle: TextStyle(fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w100),
-                        border: InputBorder.none,
-                        hintText: AppLocalizations.of(context).translate("email"),
-                    ),
-                ),
+              EditTextWidget(
+                  isPassword: false,
+                  controller: emailController,
+                  hintText: AppLocalizations.of(context).translate("email")
               ),
               SizedBox(height: 20,),
-              Container(
-                decoration: BoxDecoration(
-                  color: Constants.backgroundColorsBlur,
-                  borderRadius: BorderRadius.all(Radius.circular(40)),
-                ),
-                height: SizeConfig.blockSizeVertical * 6,
-                width: SizeConfig.blockSizeHorizontal * 80,
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w300
-                  ),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w100),
-                    border: InputBorder.none,
-                    hintText: AppLocalizations.of(context).translate("password"),
-                  ),
-                ),
+              EditTextWidget(
+                  isPassword: true,
+                  controller: passwordController,
+                  hintText: AppLocalizations.of(context).translate("password"),
               ),
-              SizedBox(height: 20,),
-              MaterialButton(
-                height: SizeConfig.blockSizeVertical * 5.5,
-                minWidth: SizeConfig.blockSizeHorizontal * 50,
-                color: Constants.secondColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(40.0),
-                ),
-                child: Text(AppLocalizations.of(context).translate("login").toUpperCase(),
-                    textAlign: TextAlign.center ,style: TextStyle(fontSize :17, fontWeight: FontWeight.normal, color: Colors.black,)),
+              SizedBox(height: 30,),
+              LoginButton(
+                key: loginButtonKey,
+                text: AppLocalizations.of(context).translate("login"),
                 onPressed: () {
-
+                  loginAction();
                 },
               )
             ],
@@ -120,5 +82,16 @@ class _PageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future loginAction() async {
+    bool loggedIn = await ProfileServices.getInstance().login(emailController.text, passwordController.text);
+    setState(() {
+      loginError = !loggedIn;
+    });
+    loginButtonKey.currentState.setLoading(false);
+    if(loggedIn) {
+      MyNavigator.goToHomePage(context);
+    }
   }
 }

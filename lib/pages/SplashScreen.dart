@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       ProfileServices.getInstance().userIsLogged().then((logged) {
         if(logged) {
-
+          MyNavigator.goToHomePage(context);
         } else {
           MyNavigator.goToLoginPage(context);
         }

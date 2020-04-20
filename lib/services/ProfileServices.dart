@@ -6,6 +6,9 @@ import 'package:flutterapptest/models/Profile.dart';
 
 class ProfileServices {
 
+  final String loggedEmail = "a";
+  final String loggedPassword = "b";
+
   static final ProfileServices _singleton = ProfileServices._internal();
 
   ProfileServices._internal() {
@@ -21,12 +24,17 @@ class ProfileServices {
   }
 
   Future<bool> userIsLogged() async {
-    String profileJson = await SharedPreferencesManager.getUserProfileJSON();
-    return profileJson != null ;
+    bool isLogged = await SharedPreferencesManager.isLoggedIn();
+    return isLogged ;
   }
 
-  Future saveUser(String login, String password) async {
-    Profile profile = Profile(login: login, password: password);
-    await SharedPreferencesManager.setUserProfileJSON(json.encode(profile));
+  Future setIsLogged(bool isLogged) async {
+    await SharedPreferencesManager.setIsLoggedIn(isLogged);
+  }
+
+  Future<bool> login(String email, String password) async {
+    await Future.delayed(const Duration(seconds: 2));
+    setIsLogged(((email == loggedEmail) && (password == loggedPassword)));
+    return ((email == loggedEmail) && (password == loggedPassword));
   }
 }

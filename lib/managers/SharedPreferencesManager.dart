@@ -7,14 +7,14 @@ class SharedPreferencesManager {
 
   /// *************************************************************************/
 
-  static Future<String> getUserProfileJSON() async{
+  static Future<bool> isLoggedIn() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_user_profile_key) ?? null;
+    return prefs.getBool(_user_profile_key) ?? false;
   }
 
-  static Future<bool> setUserProfileJSON(String json) async {
+  static Future<bool> setIsLoggedIn(bool isLogged) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(_user_profile_key, json);
+    return prefs.setBool(_user_profile_key, isLogged);
   }
 
 }
