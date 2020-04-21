@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
 
-import 'MyIconButton.dart';
-
 class NavBar extends StatefulWidget {
 
   final onAllBooksClicked;
@@ -25,23 +23,31 @@ class NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      decoration: BoxDecoration(
-        color: Constants.backgroundColorsBlur.withOpacity(0.9),
-        borderRadius: BorderRadius.all(Radius.circular(40)),
-      ),
-      height: SizeConfig.blockSizeVertical * 6,
-      width: SizeConfig.blockSizeHorizontal * 50,
-      child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Spacer(),
-            getAllIcon(),
-            Spacer(),
-            getSavedIcon(),
-            Spacer(),
-          ],
-        ),
-      );
+          decoration: BoxDecoration(
+            color: Constants.backgroundColorsBlur.withOpacity(0.4),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+          ),
+          height: SizeConfig.blockSizeVertical * 6,
+          width: SizeConfig.blockSizeHorizontal * 50,
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Spacer(),
+                      getAllIcon(),
+                      Spacer(),
+                      getSavedIcon(),
+                      Spacer(),
+                    ],
+                  ),
+              ),
+            ),
+          ),
+    );
   }
 
   Widget getAllIcon() {
