@@ -2,5 +2,6 @@
   "email" : "email",
   "password" : "Mot de passe",
   "login" : "Connexion",
-  "best_seller" : "Meilleur vente"
+  "best_seller" : "Meilleur vente",
+  "log_out" : "Déconnexion"
 }

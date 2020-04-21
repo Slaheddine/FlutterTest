@@ -6,11 +6,13 @@ import 'package:flutterapptest/localizations/AppLocalizations.dart';
 import 'package:flutterapptest/models/Book.dart';
 import 'package:flutterapptest/myNavigator.dart';
 import 'package:flutterapptest/services/BookServices.dart';
+import 'package:flutterapptest/services/ProfileServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
 import 'package:flutterapptest/widgets/LoaderWidget.dart';
 import 'package:flutterapptest/widgets/NavBar.dart';
 import 'package:flutterapptest/widgets/VerticalBookItemWidget.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _PageState extends State<HomePage> {
 
+  bool isLoggingOut = false;
   bool isLoading = true;
   List<Book> allBooks = List();
   List<Book> allSavedBooks = List();
@@ -57,28 +60,56 @@ class _PageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-      body: Container(
-        color:  Constants.backgroundColors,
-        child: Stack(
-          children: <Widget>[
-            getMainView(),
-            Padding(
-              padding: EdgeInsets.only(bottom : SizeConfig.blockSizeVertical * 2),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: NavBar(
-                  onAllBooksClicked: () {
-                    _pageController.animateToPage(0, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
-                  },
-                  onSavedBooksClicked: () {
-                    _pageController.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
-                  },
-                ),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+            icon: Icon(
+              Icons.more_vert,
+              color: Constants.secondColor,
+              size: 25.0,
+            ),
+            onSelected: (index) {
+              logOutAction();
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: Text(AppLocalizations.of(context).translate("log_out")),
               ),
-            )
-          ],
-        ),
+            ],
+          )
+        ],
+      ),
+      body: LoadingOverlay(
+          isLoading: isLoggingOut,
+          opacity : 1,
+          progressIndicator : LoaderWidget(),
+          color: Colors.black54,
+          child: getBody()
+      ),
+    );
+  }
+
+  Widget getBody() {
+    return Container(
+      color:  Constants.backgroundColors,
+      child: Stack(
+        children: <Widget>[
+          getMainView(),
+          Padding(
+            padding: EdgeInsets.only(bottom : SizeConfig.blockSizeVertical * 2),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: NavBar(
+                onAllBooksClicked: () {
+                  _pageController.animateToPage(0, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                },
+                onSavedBooksClicked: () {
+                  _pageController.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                },
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -243,6 +274,17 @@ class _PageState extends State<HomePage> {
       BookServices.getInstance().removeBookAsFavored(book);
     }
     loadSavedBooks();
+  }
+  
+  Future logOutAction() async {
+    setState(() {
+      isLoggingOut = true;
+    });
+    await ProfileServices.getInstance().logOut();
+    setState(() {
+      isLoggingOut = false;
+    });
+    MyNavigator.goToLoginPage(context);
   }
   
 }

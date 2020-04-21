@@ -37,4 +37,9 @@ class ProfileServices {
     setIsLogged(((email == loggedEmail) && (password == loggedPassword)));
     return ((email == loggedEmail) && (password == loggedPassword));
   }
+
+  Future logOut() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setIsLogged(false);
+  }
 }

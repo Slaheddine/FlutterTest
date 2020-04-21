@@ -4,7 +4,7 @@ import 'models/Book.dart';
 
 class MyNavigator {
   static void goToLoginPage(BuildContext context) async {
-    await Navigator.pushReplacementNamed(context, "login");
+    await Navigator.pushNamedAndRemoveUntil(context, "login", (Route<dynamic> route) => false);
   }
 
   static void goToHomePage(BuildContext context) async {
