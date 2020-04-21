@@ -6,6 +6,7 @@ import 'package:flutterapptest/myNavigator.dart';
 import 'package:flutterapptest/services/ProfileServices.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
 import 'package:flutterapptest/utils/SizeConfig.dart';
+import 'package:flutterapptest/utils/UIUtils.dart';
 import 'package:flutterapptest/widgets/EditTextWidget.dart';
 import 'package:flutterapptest/widgets/LoginButton.dart';
 
@@ -19,7 +20,6 @@ class _PageState extends State<LoginPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   GlobalKey<LoginButtonState> loginButtonKey = GlobalKey();
-  bool loginError = false;
 
   @override
   void initState() {
@@ -75,12 +75,14 @@ class _PageState extends State<LoginPage> {
 
   Future loginAction() async {
     bool loggedIn = await ProfileServices.getInstance().login(emailController.text, passwordController.text);
-    setState(() {
-      loginError = !loggedIn;
-    });
     loginButtonKey.currentState.setLoading(false);
     if(loggedIn) {
       MyNavigator.goToHomePage(context);
+    } else {
+      UIUtils.showErrorNotificationAlert(context,
+          AppLocalizations.of(context).translate("login_error_title"),
+          AppLocalizations.of(context).translate("login_error_description")
+      );
     }
   }
 }

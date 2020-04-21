@@ -29,6 +29,7 @@ dependencies:
   shared_preferences: ^0.5.4+5
   loading_overlay: ^0.2.1
   flutter_page_transition: ^0.1.6
+  edge_alert: ^0.0.1
 
 dev_dependencies:
   flutter_test:

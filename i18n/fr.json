@@ -3,5 +3,7 @@
   "password" : "Mot de passe",
   "login" : "Connexion",
   "best_seller" : "Meilleur vente",
-  "log_out" : "Déconnexion"
+  "log_out" : "Déconnexion",
+  "login_error_title" : "Erreur authentification",
+  "login_error_description" : "Veuillez vérifier votre email et mot de passe"
 }
