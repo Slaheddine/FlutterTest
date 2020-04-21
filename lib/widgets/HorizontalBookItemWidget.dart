@@ -11,8 +11,10 @@ class HorizontalBookItemWidget extends StatefulWidget {
 
   Book book;
   var onItemClicked;
+  bool saveAction;
+  double width;
 
-  HorizontalBookItemWidget({this.book, this.onItemClicked});
+  HorizontalBookItemWidget({this.width ,this.book, this.onItemClicked, this.saveAction = true});
 
   @override
   ItemState createState() => ItemState();
@@ -34,14 +36,14 @@ class ItemState extends State<HorizontalBookItemWidget> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             height: SizeConfig.blockSizeVertical * 28,
-            width: SizeConfig.blockSizeHorizontal * 35,
+            width: widget.width,
             child: Stack(
                     children: <Widget>[
                       FadeInImage(
                           image: NetworkImage(widget.book.imageUrl),
                           placeholder: AssetImage("assets/images/placeholder.jpg")
                       ),
-                      Align(
+                      if (widget.saveAction) Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: const EdgeInsets.only(right : 14.0, bottom: 10),

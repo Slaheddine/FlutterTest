@@ -160,6 +160,7 @@ class _PageState extends State<HomePage> {
           itemCount:allBooks.length,
           itemBuilder: (BuildContext context, int index) {
             return HorizontalBookItemWidget(
+              width: SizeConfig.blockSizeHorizontal * 35,
               book: allBooks[index],
               onItemClicked: () {
                 MyNavigator.goToDetailPage(context, allBooks[index]);
