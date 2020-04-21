@@ -1,10 +1,8 @@
 
 import 'dart:convert';
 
-import 'package:flutterapptest/managers/SharedPreferencesManager.dart';
 import 'package:flutterapptest/models/Book.dart';
-import 'package:flutterapptest/models/Profile.dart';
-import 'package:flutterapptest/services/HttpManager.dart';
+import 'package:flutterapptest/managers/HttpManager.dart';
 
 class BookServices extends HttpManager{
 

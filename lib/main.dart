@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
             transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
 
                 switch (routeSettings.name){
-                  case 'login': return effectMap[PageTransitionType.transferRight](Curves.linear, animation, secondaryAnimation, child);
+                  case 'login': return effectMap[PageTransitionType.fadeIn](Curves.linear, animation, secondaryAnimation, child);
                   case 'home': return effectMap[PageTransitionType.transferRight](Curves.linear, animation, secondaryAnimation, child);
                   case 'detail': return effectMap[PageTransitionType.transferRight](Curves.linear, animation, secondaryAnimation, child);
                   default: return effectMap[PageTransitionType.fadeIn](Curves.linear, animation, secondaryAnimation, child);

@@ -20,6 +20,8 @@ class NavBar extends StatefulWidget {
 
 class NavBarState extends State<NavBar> {
 
+  bool allBookSelected = true;
+
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -44,16 +46,18 @@ class NavBarState extends State<NavBar> {
 
   Widget getAllIcon() {
     return Container(
-        height: SizeConfig.blockSizeVertical * 8 * 0.5,
-        width: SizeConfig.blockSizeVertical * 8 * 0.5,
+        height: SizeConfig.blockSizeVertical * 8 * 0.3,
+        width: SizeConfig.blockSizeVertical * 8 * 0.3,
         child: InkWell(
           customBorder: new CircleBorder(),
           onTap: () {
             widget.onAllBooksClicked();
+            setState(() {
+              allBookSelected = true;
+            });
           },
-          child: new Icon(
-            Icons.bookmark,
-            color: Constants.secondColor,
+          child: Image.asset(
+              (allBookSelected) ? "assets/images/ic_book.png" : "assets/images/ic_books_default.png"
           ),
         )
     );
@@ -67,10 +71,13 @@ class NavBarState extends State<NavBar> {
           customBorder: new CircleBorder(),
           onTap: () {
             widget.onSavedBooksClicked();
+            setState(() {
+              allBookSelected = false;
+            });
           },
           child: new Icon(
             Icons.bookmark,
-            color: Constants.secondColor,
+            color: (!allBookSelected) ? Constants.secondColor : Constants.secondColor.withOpacity(0.3),
           ),
         )
     );

@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:flutterapptest/managers/SharedPreferencesManager.dart';
-import 'package:flutterapptest/models/Profile.dart';
 
 class ProfileServices {
 

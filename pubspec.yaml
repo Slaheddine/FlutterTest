@@ -51,6 +51,8 @@ flutter:
   - i18n/fr.json
   - assets/images/logo.png
   - assets/images/placeholder.jpg
+  - assets/images/ic_book.png
+  - assets/images/ic_books_default.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
