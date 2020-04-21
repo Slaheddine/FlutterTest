@@ -24,17 +24,6 @@ class _PageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
-    Timer(Duration(seconds: 3), () => {
-
-      ProfileServices.getInstance().userIsLogged().then((logged) {
-        if(logged) {
-
-        } else {
-
-        }
-      })
-    });
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutterapptest/pages/BookDetailPage.dart';
 import 'package:flutterapptest/pages/HomePage.dart';
 import 'package:flutterapptest/pages/LoginPage.dart';
 import 'package:flutterapptest/pages/SplashScreen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
               switch (routeSettings.name){
                 case 'login': return LoginPage();
                 case 'home': return HomePage();
+                case 'detail': return BookDetailPage(routeSettings.arguments);
                 default: return null;
               }
             },

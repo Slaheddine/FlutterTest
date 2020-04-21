@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
 import 'package:flutterapptest/localizations/AppLocalizations.dart';
 import 'package:flutterapptest/models/Book.dart';
+import 'package:flutterapptest/myNavigator.dart';
 import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
-import 'package:flutterapptest/widgets/LoginButton.dart';
 import 'package:flutterapptest/widgets/NavBar.dart';
 import 'package:flutterapptest/widgets/VerticalBookItemWidget.dart';
 
@@ -159,7 +159,12 @@ class _PageState extends State<HomePage> {
           scrollDirection: Axis.horizontal,
           itemCount:allBooks.length,
           itemBuilder: (BuildContext context, int index) {
-            return HorizontalBookItemWidget(allBooks[index]);
+            return HorizontalBookItemWidget(
+              book: allBooks[index],
+              onItemClicked: () {
+                MyNavigator.goToDetailPage(context, allBooks[index]);
+              },
+            );
           },
         ),
       ),
@@ -178,7 +183,12 @@ class _PageState extends State<HomePage> {
           scrollDirection: Axis.vertical,
           itemCount:allBooks.length,
           itemBuilder: (BuildContext context, int index) {
-            return VerticalBookItemWidget(allBooks[index]);
+            return VerticalBookItemWidget(
+              book: allBooks[index],
+              onItemClicked: () {
+                MyNavigator.goToDetailPage(context, allBooks[index]);
+              },
+            );
           },
         ),
       ),
