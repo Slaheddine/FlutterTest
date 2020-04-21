@@ -46,6 +46,10 @@ class BookServices extends HttpManager{
     return list;
   }
 
+  Future<List<Book>> getAllBooks() async {
+    return mockBookList();
+  }
+
   Future<List<Book>> getSavedBooks() async {
     return mockBookList();
   }

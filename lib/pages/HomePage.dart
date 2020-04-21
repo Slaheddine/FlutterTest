@@ -84,7 +84,7 @@ class _PageState extends State<HomePage> {
     setState(() {
       isLoading = true;
     });
-    List books = await BookServices.getInstance().mockBookList();
+    List books = await BookServices.getInstance().getAllBooks();
     setState(() {
       allBooks = books;
       isLoading = false;
