@@ -8,6 +8,7 @@ import 'package:flutterapptest/myNavigator.dart';
 import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
+import 'package:flutterapptest/widgets/LoaderWidget.dart';
 import 'package:flutterapptest/widgets/NavBar.dart';
 import 'package:flutterapptest/widgets/VerticalBookItemWidget.dart';
 
@@ -20,6 +21,8 @@ class _PageState extends State<HomePage> {
 
   bool isLoading = true;
   List<Book> allBooks = List();
+  List<Book> allSavedBooks = List();
+  
   PageController _pageController = PageController(viewportFraction : 1);
 
   @override
@@ -80,7 +83,7 @@ class _PageState extends State<HomePage> {
     );
   }
 
-  Future loadAllBook() async {
+  Future loadBooks() async {
     setState(() {
       isLoading = true;
     });
@@ -91,19 +94,24 @@ class _PageState extends State<HomePage> {
     });
   }
 
+  Future loadSavedBooks() async {
+    List savedBooks = await BookServices.getInstance().getSavedBooks();
+    setState(() {
+      allSavedBooks = savedBooks;
+    });
+  }
+
+  Future loadAllBook() async {
+    loadBooks();
+    loadSavedBooks();
+  }
+
   Widget getMainView() {
 
     if(isLoading) {
       return Container(
         child: Center(
-          child: SizedBox(
-            height: SizeConfig.blockSizeVertical * 5.5,
-            width: SizeConfig.blockSizeVertical * 5.5,
-            child: CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(Constants.secondColor),
-              strokeWidth: 3,
-            ),
-          ),
+          child: LoaderWidget(),
         ),
       );
     }
@@ -129,7 +137,7 @@ class _PageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          getHorizontalBookList(),
+          getHorizontalAllBookList(),
           Padding(
             padding: const EdgeInsets.only(left : 30.0),
             child: Text(AppLocalizations.of(context).translate("best_seller"),
@@ -137,42 +145,17 @@ class _PageState extends State<HomePage> {
                 style: new TextStyle(fontSize :SizeConfig.blockSizeVertical * 2.7, fontWeight: FontWeight.w400, color: Constants.secondColor)
             ),
           ),
-          getVerticalBookList()
+          getAllBookList()
         ],
       ),
     );
   }
 
   Widget savedBookPage() {
-    return getVerticalBookList();
+    return getSavedBookList();
   }
 
-  Widget getHorizontalBookList() {
-    return Padding(
-      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
-      child: Container(
-        height: SizeConfig.blockSizeVertical * 28,
-        child: ListView.builder(
-          physics: AlwaysScrollableScrollPhysics(),
-          reverse: false,
-          padding: EdgeInsets.only(top: 5.0),
-          scrollDirection: Axis.horizontal,
-          itemCount:allBooks.length,
-          itemBuilder: (BuildContext context, int index) {
-            return HorizontalBookItemWidget(
-              width: SizeConfig.blockSizeHorizontal * 35,
-              book: allBooks[index],
-              onItemClicked: () {
-                MyNavigator.goToDetailPage(context, allBooks[index]);
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget getVerticalBookList() {
+  Widget getAllBookList() {
     return Padding(
       padding: EdgeInsets.only(top: 20, bottom: SizeConfig.blockSizeVertical * 10, left: 20),
       child: Container(
@@ -189,6 +172,9 @@ class _PageState extends State<HomePage> {
               onItemClicked: () {
                 MyNavigator.goToDetailPage(context, allBooks[index]);
               },
+              onSaveAction: () {
+                saveOrDeleteBookFavored(allBooks[index], !BookServices.getInstance().isMarkedAsFavored(allBooks[index]));
+              },
             );
           },
         ),
@@ -196,5 +182,67 @@ class _PageState extends State<HomePage> {
     );
   }
 
-  //HorizontalBookItemWidget(allBooks[index])
+  Widget getHorizontalAllBookList() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
+      child: Container(
+        height: SizeConfig.blockSizeVertical * 28,
+        child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+          reverse: false,
+          padding: EdgeInsets.only(top: 5.0),
+          scrollDirection: Axis.horizontal,
+          itemCount:allBooks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return HorizontalBookItemWidget(
+              width: SizeConfig.blockSizeHorizontal * 35,
+              book: allBooks[index],
+              onItemClicked: () {
+                MyNavigator.goToDetailPage(context, allBooks[index]);
+              },onSaveAction: () {
+                saveOrDeleteBookFavored(allBooks[index], !BookServices.getInstance().isMarkedAsFavored(allBooks[index]));
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget getSavedBookList() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: SizeConfig.blockSizeVertical * 10, left: 20),
+      child: Container(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          reverse: false,
+          padding: EdgeInsets.only(top: 5.0),
+          scrollDirection: Axis.vertical,
+          itemCount:allSavedBooks.length,
+          itemBuilder: (BuildContext context, int index) {
+            return VerticalBookItemWidget(
+              book: allSavedBooks[index],
+              onItemClicked: () {
+                MyNavigator.goToDetailPage(context, allSavedBooks[index]);
+              },
+              onSaveAction: () {
+                saveOrDeleteBookFavored(allSavedBooks[index], false);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void saveOrDeleteBookFavored(Book book, bool toSave) {
+    if(toSave) {
+      BookServices.getInstance().markBookAsFavored(book);
+    } else {
+      BookServices.getInstance().removeBookAsFavored(book);
+    }
+    loadSavedBooks();
+  }
+  
 }

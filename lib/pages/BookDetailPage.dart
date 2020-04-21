@@ -10,6 +10,7 @@ import 'package:flutterapptest/constants.dart' as Constants;
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/EditTextWidget.dart';
 import 'package:flutterapptest/widgets/HorizontalBookItemWidget.dart';
+import 'package:flutterapptest/widgets/LoaderWidget.dart';
 import 'package:flutterapptest/widgets/LoginButton.dart';
 import 'package:flutterapptest/widgets/MyIconButton.dart';
 
@@ -26,6 +27,7 @@ class BookDetailPage extends StatefulWidget {
 class _PageDetailState extends State<BookDetailPage> {
 
   List<Book> savedBooks = List();
+  bool isLoadingSavedBook = true;
 
   @override
   void initState() {
@@ -117,10 +119,12 @@ class _PageDetailState extends State<BookDetailPage> {
           height: 20,
         ),
         MyIconButton(
+          largeMode: true,
           iconData: Icons.bookmark,
           actionClick: () {
-
+            saveOrDeleteBookFavored(widget.book, !BookServices.getInstance().isMarkedAsFavored(widget.book));
           },
+          isMarked: BookServices.getInstance().isMarkedAsFavored(widget.book),
         ),
         Spacer(),
         getSavedBookList(),
@@ -136,7 +140,7 @@ class _PageDetailState extends State<BookDetailPage> {
       ),
       child: Container(
         height: SizeConfig.blockSizeVertical * 18,
-        child: ListView.builder(
+        child: (!isLoadingSavedBook) ? ListView.builder(
           physics: AlwaysScrollableScrollPhysics(
           ),
           reverse: false,
@@ -157,6 +161,9 @@ class _PageDetailState extends State<BookDetailPage> {
               },
             );
           },
+        )
+        : Center(
+          child: LoaderWidget(),
         ),
       ),
     );
@@ -166,6 +173,16 @@ class _PageDetailState extends State<BookDetailPage> {
     List books = await BookServices.getInstance().getSavedBooks();
     setState(() {
       savedBooks = books;
+      isLoadingSavedBook = false;
     });
+  }
+
+  void saveOrDeleteBookFavored(Book book, bool toSave) {
+    if(toSave) {
+      BookServices.getInstance().markBookAsFavored(book);
+    } else {
+      BookServices.getInstance().removeBookAsFavored(book);
+    }
+    loadSavedBook();
   }
 }

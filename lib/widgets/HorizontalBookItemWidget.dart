@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/models/Book.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
+import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/MyIconButton.dart';
 
@@ -13,8 +14,9 @@ class HorizontalBookItemWidget extends StatefulWidget {
   var onItemClicked;
   bool saveAction;
   double width;
+  var onSaveAction;
 
-  HorizontalBookItemWidget({this.width ,this.book, this.onItemClicked, this.saveAction = true});
+  HorizontalBookItemWidget({this.width ,this.book, this.onItemClicked, this.saveAction = true, this.onSaveAction});
 
   @override
   ItemState createState() => ItemState();
@@ -48,9 +50,12 @@ class ItemState extends State<HorizontalBookItemWidget> {
                         child: Padding(
                           padding: const EdgeInsets.only(right : 14.0, bottom: 10),
                           child: MyIconButton(
+                            isMarked: BookServices.getInstance().isMarkedAsFavored(widget.book),
                             iconData: Icons.bookmark,
                             actionClick: () {
-
+                              if(widget.onSaveAction!=null) {
+                                widget.onSaveAction();
+                              }
                             },
                           ),
                         ),

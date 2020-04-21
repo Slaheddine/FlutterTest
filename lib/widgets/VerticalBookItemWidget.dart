@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/models/Book.dart';
 import 'package:flutterapptest/constants.dart' as Constants;
+import 'package:flutterapptest/services/BookServices.dart';
 import 'package:flutterapptest/utils/SizeConfig.dart';
 import 'package:flutterapptest/widgets/MyIconButton.dart';
 
@@ -11,8 +12,9 @@ class VerticalBookItemWidget extends StatefulWidget {
 
   Book book;
   var onItemClicked;
+  var onSaveAction;
 
-  VerticalBookItemWidget({this.book, this.onItemClicked});
+  VerticalBookItemWidget({this.book, this.onItemClicked, this.onSaveAction});
 
   @override
   ItemState createState() => ItemState();
@@ -75,9 +77,12 @@ class ItemState extends State<VerticalBookItemWidget> {
                       Padding(
                         padding: const EdgeInsets.only(right : 14.0, bottom: 10),
                         child: MyIconButton(
+                          isMarked: BookServices.getInstance().isMarkedAsFavored(widget.book),
                           iconData: Icons.bookmark,
                           actionClick: () {
-
+                            if(widget.onSaveAction!=null) {
+                              widget.onSaveAction();
+                            }
                           },
                         ),
                       )
@@ -92,21 +97,3 @@ class ItemState extends State<VerticalBookItemWidget> {
     );
   }
 }
-/*
-Image.network(
-                  widget.book.imageUrl,
-                  fit: BoxFit.cover
-              )
- */
-
-/*
-Padding(
-                  padding: const EdgeInsets.only(right : 14.0, bottom: 10),
-                  child: MyIconButton(
-                    iconData: Icons.bookmark,
-                    actionClick: () {
-
-                    },
-                  ),
-                )
- */
