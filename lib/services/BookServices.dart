@@ -8,10 +8,13 @@ import 'package:flutterapptest/services/HttpManager.dart';
 
 class BookServices extends HttpManager{
 
+  final String GET_BOOKS_API = "/api/json/get/Vy0sPkEvO?delay=1200";
+
   static final BookServices _singleton = BookServices._internal();
 
-  List<Book> _allMockBook = List();
-  List<Book> _savedBook = List();
+  List<Book> _allMockBooks = List();
+  List<Book> _allBooks = List();
+  List<Book> _savedBooks = List();
 
   BookServices._internal() {
     Book b = Book(id: "5e8b51c22452b455e54ffc1822", volume: 1, title: "Le guide du voyageur 2121", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
@@ -20,7 +23,7 @@ class BookServices extends HttpManager{
     Book b3 = Book(id: "5e8b51c22452b455e54ffc182212", volume: 1, title: "Le guide du voyageur 7767668", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
     Book b4 = Book(id: "5e8b51c22452b455e54ffc181144", volume: 1, title: "Le guide du voyageur 11111111", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
     Book b5 = Book(id: "5e8b51c22452b455e54ffc184411", volume: 1, title: "Le guide du voyageur 000000", author: "Douglas Adams", imageUrl: "https://i.ibb.co/JytmRjz/Le-guide-du-voyageur-galactique.jpg");
-    _allMockBook = [b, b1, b2, b3, b4, b5];
+    _allMockBooks = [b, b1, b2, b3, b4, b5];
   }
 
   factory BookServices() {
@@ -42,27 +45,33 @@ class BookServices extends HttpManager{
     return new Book.fromJson(response);
   }
 
-  Future<List<Book>> getAllBooks() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return _allMockBook;
+  Future<List<Book>> getAllBooks(bool mocked) async {
+    if(mocked) {
+      await Future.delayed(const Duration(seconds: 2));
+      return _allMockBooks;
+    } else {
+      dynamic responseList = await getRequest(GET_BOOKS_API, null, false);
+      _allBooks = castDynamicToList(responseList);
+      return _allBooks;
+    }
   }
 
   Future<List<Book>> getSavedBooks() async {
-    return _savedBook;
+    return _savedBooks;
   }
 
   Future markBookAsFavored(Book book) async {
-    if(_savedBook.contains(book)) {
+    if(_savedBooks.contains(book)) {
       return;
     }
-    _savedBook.add(book);
+    _savedBooks.add(book);
   }
 
   Future removeBookAsFavored(Book book) async {
-    return _savedBook.remove(book);
+    return _savedBooks.remove(book);
   }
 
   bool isMarkedAsFavored(Book book) {
-    return _savedBook.contains(book);
+    return _savedBooks.contains(book);
   }
 }

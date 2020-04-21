@@ -118,7 +118,7 @@ class _PageState extends State<HomePage> {
     setState(() {
       isLoading = true;
     });
-    List books = await BookServices.getInstance().getAllBooks();
+    List books = await BookServices.getInstance().getAllBooks(false);
     setState(() {
       allBooks = books;
       isLoading = false;
